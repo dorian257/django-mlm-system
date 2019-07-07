@@ -1,0 +1,7 @@
+{% load widget_tweaks i18n %}
+
+{% include 'libs/bs4_form_head.html' with form=form %}
+
+{% for field in form.visible_fields %}
+  {% include 'libs/bs4_field.html' with field=field form=form %}
+{% endfor %}

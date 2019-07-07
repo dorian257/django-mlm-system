@@ -1,6 +1,6 @@
 {
   "name": "mlm",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MLM Sytem in Django",
   "main": "\"\"",
   "dependencies": {

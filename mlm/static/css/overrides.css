@@ -1,0 +1,14 @@
+.focused .form-control.is-valid {
+  border-color: #2dce89; }
+
+.was-validated .custom-select:valid {
+  border-color: #2dce89; }
+
+.custom-select.is-valid {
+  border-color: #2dce89; }
+
+.mlm_brand {
+  font-weight: 1000;
+  font-size: 1.5rem; }
+
+/*# sourceMappingURL=overrides.css.map */

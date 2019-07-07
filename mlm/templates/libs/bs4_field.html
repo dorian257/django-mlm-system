@@ -1,0 +1,10 @@
+{% load widget_tweaks %}
+
+<div class="form-group">
+    <label for="{{ field.id_for_label }}">
+        {{ field.label }}
+        {% if field.field.required %}<code>*</code>{% endif %}
+    </label>
+
+    {% include "libs/bs4_field_essential.html" %}
+  </div>

@@ -1,0 +1,44 @@
+{% load widget_tweaks %}
+
+{% if form.is_bound %}
+        {% if field.errors %}
+            {% if field|widget_type == 'booleanfield' %}
+                {% render_field field class="is-invalid" %}
+            {% else %}
+                {% if sm %}
+                    {% render_field field class="form-control form-control-sm is-invalid"  %}
+                {% else %}
+                    {% render_field field class="form-control is-invalid" %}
+                {% endif %}
+            {% endif %}
+            {% for error in field.errors %}
+                <div class="invalid-feedback">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        {% else %}
+            {% if field|widget_type == 'booleanfield' %}
+                {% render_field field class="is-valid" %}
+            {% else %}
+                {% if sm %}
+                    {% render_field field class="form-control form-control-sm is-valid" %}
+                {% else %}
+                    {% render_field field class="form-control is-valid" %}
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    {% else %}
+      {% if field|widget_type == 'booleanfield' %}
+                {% render_field field class="" %}
+            {% else %}
+                {% if sm %}
+                    {% render_field field class="form-control form-control-sm" placeholder=placeholder %}
+                {% else %}
+                    {% render_field field class="form-control" placeholder=placeholder %}
+                {% endif %}
+            {% endif %}
+    {% endif %}
+
+    {% if field.help_text %}
+      <small class="form-text text-muted">{{ field.help_text }}</small>
+    {% endif %}

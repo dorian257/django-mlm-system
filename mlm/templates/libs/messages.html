@@ -1,0 +1,18 @@
+{% if messages %}
+<div class="container-fluid">
+        {% for message in messages %}
+        <div class="row" style="padding:0px 15px;">
+            <div class="col-lg-12 alert {% if message.tags == "error" %} alert-danger{% else %} alert-{{ message.tags }}{% endif %} alert-dismissible" role="alert" style="margin-bottom:5px;">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {{ message }}
+                <br/>
+                <small class="text-muted float-right" style="font-size:9px;">
+                    &copy; {% now "Y" %} <b>{{ MLM_GROUP_NAME }}</b>
+                </small>
+            </div>
+        </div>
+        {% endfor %}
+</div>
+{% endif %}
