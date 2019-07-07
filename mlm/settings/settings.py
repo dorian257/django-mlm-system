@@ -12,6 +12,20 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
+from django.contrib.messages import constants as messages
+from django.utils.translation import ugettext_lazy as _
+
+
+# mimetypes.add_type("text/css", ".css", True)
+
+MESSAGE_TAGS = {
+    messages.DEBUG: "default",
+    messages.INFO: "info",
+    messages.SUCCESS: "success",
+    messages.WARNING: "warning",
+    messages.ERROR: "danger",
+}
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -23,7 +37,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = "66d!6*via%m8pj!f7zk+z4=-*-b%^79rmod(x8@t!g$w)z$phn"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -40,6 +54,9 @@ INSTALLED_APPS = [
     # Our apps
     "mlm.apps.authentication",
     "mlm.apps.main",
+    # 3rd part
+    "widget_tweaks",
+    "debug_toolbar",
 ]
 
 MIDDLEWARE = [
@@ -50,6 +67,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "mlm.urls"
@@ -57,7 +75,7 @@ ROOT_URLCONF = "mlm.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -65,6 +83,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "mlm.apps.main.context_processors.mlm_defaults",
             ]
         },
     }
@@ -79,8 +98,8 @@ WSGI_APPLICATION = "mlm.wsgi.application"
 AUTH_USER_MODEL = "authentication.User"
 
 
-LOGIN_URL = "/login/"
-LOGIN_REDIRECT_URL = "/"
+LOGIN_URL = "/"
+LOGIN_REDIRECT_URL = "/dashboard/"
 LOGOUT_REDIRECT_URL = "/"
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
@@ -113,9 +132,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "fr-fr"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Africa/Bujumbura"
 
 USE_I18N = True
 
@@ -127,7 +146,19 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_URL = "/static/"
+STATIC_URL = "/assets/"
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+STATIC_ROOT = os.path.join(BASE_DIR, "../staticfiles")
+
+MEDIA_URL = "/uploads/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "../media")
+
+INTERNAL_IPS = ["127.0.0.1"]
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+MLM_GROUP_NAME = "Moutardes"
+MLM_GROUP_URL = "moutarde"
 
 
 # Local Settings

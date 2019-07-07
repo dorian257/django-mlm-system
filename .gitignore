@@ -125,3 +125,6 @@ media/
 *.prof
 *.lprof
 dev_manager.py
+
+
+.sass-cache/

@@ -1,0 +1,28 @@
+{% extends "registration/base.html" %}
+{% load static widget_tweaks %}
+
+{% block reg_title %}Cr&eacute;ation de compte{% endblock reg_title %}
+{% block reg_message %}Compl&eacute;tez le formulaire pour cr&eacute;er un compte et profiter de nos services.{% endblock reg_message %}
+
+{% block content %}
+<div class="col-lg-5 col-md-7">
+  <div class="card bg-secondary shadow border-0">
+    <div class="card-body px-lg-5 py-lg-5">
+      <form method="POST" action="{% url 'auth:register' %}">
+        {% csrf_token %}
+        {% include "libs/bs4_form.html" %}
+        <button type="submit" name="_submit" class="btn btn-primary">S'inscrire</button>
+        <!--<hr/>-->
+      </form>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col-6">
+      <a href="{% url 'auth:login' %}" class="text-light"><small>Connexion</small></a>
+    </div>
+    <div class="col-6 text-right">
+      <a href="{% url 'auth:register' %}" class="text-light"><small>Conditions d'utilisation</small></a>
+    </div>
+  </div>
+</div>
+{% endblock content %}

@@ -44,7 +44,7 @@ class UserCreationForm(forms.ModelForm):
     )
 
     class Meta:
-        model = User
+        model = UserModel
         fields = ("username", "email")
         field_classes = {"username": UsernameField}
 

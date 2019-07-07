@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 
 # import jwt
-from mlm.apps.core.models import TimestampedModel
 from django.conf import settings
 from django.contrib.auth.models import (
     AbstractBaseUser,
@@ -9,6 +8,9 @@ from django.contrib.auth.models import (
     PermissionsMixin,
 )
 from django.db import models
+from django.urls import reverse_lazy
+
+from mlm.apps.core.models import TimestampedModel
 
 
 class UserManager(BaseUserManager):
@@ -68,10 +70,6 @@ class User(AbstractBaseUser, PermissionsMixin, TimestampedModel):
     # the most common form of login credential at the time of writing.
     email = models.EmailField(db_index=True, unique=True)
 
-    # Let add the first and last name to know the customer
-    first_name = models.CharField(max_length=255, blank=True, null=True)
-    last_name = models.CharField(max_length=255, blank=True, null=True)
-
     # When a user no longer wishes to use our platform, they may try to delete
     # their account. That's a problem for us because the data we collect is
     # valuable to us and we don't want to delete it. We
@@ -84,6 +82,9 @@ class User(AbstractBaseUser, PermissionsMixin, TimestampedModel):
     # log into the Django admin site. For most users this flag will always be
     # false.
     is_staff = models.BooleanField(default=False)
+
+    # Boolean True if Email has been confirmed
+    email_confirmed = models.BooleanField(default=False)
 
     # More fields required by Django when specifying a custom user model.
 
@@ -124,20 +125,11 @@ class User(AbstractBaseUser, PermissionsMixin, TimestampedModel):
         This method is required by Django for things like handling emails.
         Typically this would be the user's first and last name.
         """
-        name = ""
-        if self.first_name:
-            name = name + self.first_name
-        if self.last_name:
-            name = (
-                name + " " + self.last_name
-                if self.first_name
-                else name + self.last_name
-            )
+        name = self.username
+        if hasattr(self, "profile"):
+            name = self.profile.get_full_name()
 
-        if name == "":
-            return self.username
-        else:
-            return name
+        return name
 
     def get_short_name(self):
         """
@@ -145,10 +137,16 @@ class User(AbstractBaseUser, PermissionsMixin, TimestampedModel):
         Typically, this would be the user's first name. Since we do not store
         the user's real name, we return their username instead.
         """
-        if self.first_name:
-            return self.first_name
+        if hasattr(self, "profile"):
+            return self.profile.get_short_name()
         else:
             return self.username
+
+    def get_profile_url(self):
+        if hasattr(self, "profile"):
+            return reverse_lazy("auth:profile-detail", kwargs={"pk": self.profile.pk})
+        else:
+            return reverse_lazy("auth:profile-create")
 
     # def _generate_jwt_token(self):
     #     """
@@ -164,3 +162,47 @@ class User(AbstractBaseUser, PermissionsMixin, TimestampedModel):
     #     )
 
     #     return token.decode("utf-8")
+
+    def email_user(self, subject, message):
+        from django.core import mail  # isort:skip
+        from django.utils.html import strip_tags  # isort:skip
+
+        html_message = message
+        plain_message = strip_tags(html_message)
+        from_email = settings.DEFAULT_FROM_EMAIL
+
+        mail.send_mail(
+            subject, plain_message, from_email, [self.email], html_message=html_message
+        )
+
+
+class Profile(TimestampedModel):
+    user = models.OneToOneField("User", on_delete=models.CASCADE)
+
+    # Let add the first and last name to know the customer
+    first_name = models.CharField(max_length=150)
+    middle_name = models.CharField(max_length=150, null=True, blank=True)
+    last_name = models.CharField(max_length=150)
+
+    avatar = models.ImageField(
+        upload_to="user/avatar/", verbose_name="Photo", null=True, blank=True
+    )
+    about_me = models.TextField(null=True, blank=True, verbose_name="A propos de moi")
+
+    def get_full_name(self):
+        name = self.first_name
+        if self.middle_name:
+            name = (
+                name + " " + self.middle_name
+                if self.first_name
+                else name + self.middle_name
+            )
+        name + self.last_name
+
+        return name
+
+    def get_short_name(self):
+        return self.first_name
+
+    def get_absolute_url(self):
+        return reverse_lazy("auth:profile-detail", kwargs={"pk": self.pk})

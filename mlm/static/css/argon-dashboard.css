@@ -1,0 +1,84 @@
+/*
+Error: Invalid CSS after "...lor}: #{$value}": expected "{", was ";"
+        on line 4 of mlm/static/scss/argon-dashboard/bootstrap/_root.scss
+        from line 29 of mlm/static/scss/argon-dashboard.scss
+
+1: :root {
+2:   // Custom variable values only support SassScript inside `#{}`.
+3:   @each $color, $value in $colors {
+4:     --#{$color}: #{$value};
+5:   }
+6: 
+7:   @each $color, $value in $theme-colors {
+8:     --#{$color}: #{$value};
+9:   }
+
+Backtrace:
+mlm/static/scss/argon-dashboard/bootstrap/_root.scss:4
+mlm/static/scss/argon-dashboard.scss:29
+/usr/lib/ruby/vendor_ruby/sass/scss/parser.rb:1179:in `expected'
+/usr/lib/ruby/vendor_ruby/sass/scss/parser.rb:1115:in `expected'
+/usr/lib/ruby/vendor_ruby/sass/scss/parser.rb:1110:in `tok!'
+/usr/lib/ruby/vendor_ruby/sass/scss/parser.rb:654:in `block'
+/usr/lib/ruby/vendor_ruby/sass/scss/parser.rb:724:in `declaration_or_ruleset'
+/usr/lib/ruby/vendor_ruby/sass/scss/parser.rb:674:in `block_child'
+/usr/lib/ruby/vendor_ruby/sass/scss/parser.rb:663:in `block_contents'
+/usr/lib/ruby/vendor_ruby/sass/scss/parser.rb:655:in `block'
+/usr/lib/ruby/vendor_ruby/sass/scss/parser.rb:305:in `each_directive'
+/usr/lib/ruby/vendor_ruby/sass/scss/parser.rb:220:in `special_directive'
+/usr/lib/ruby/vendor_ruby/sass/scss/parser.rb:195:in `directive'
+/usr/lib/ruby/vendor_ruby/sass/scss/parser.rb:674:in `block_child'
+/usr/lib/ruby/vendor_ruby/sass/scss/parser.rb:663:in `block_contents'
+/usr/lib/ruby/vendor_ruby/sass/scss/parser.rb:655:in `block'
+/usr/lib/ruby/vendor_ruby/sass/scss/parser.rb:647:in `ruleset'
+/usr/lib/ruby/vendor_ruby/sass/scss/parser.rb:673:in `block_child'
+/usr/lib/ruby/vendor_ruby/sass/scss/parser.rb:663:in `block_contents'
+/usr/lib/ruby/vendor_ruby/sass/scss/parser.rb:123:in `stylesheet'
+/usr/lib/ruby/vendor_ruby/sass/scss/parser.rb:39:in `parse'
+/usr/lib/ruby/vendor_ruby/sass/engine.rb:403:in `_to_tree'
+/usr/lib/ruby/vendor_ruby/sass/engine.rb:309:in `to_tree'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:324:in `block in visit_import'
+/usr/lib/ruby/vendor_ruby/sass/stack.rb:88:in `block in with_import'
+/usr/lib/ruby/vendor_ruby/sass/stack.rb:115:in `with_frame'
+/usr/lib/ruby/vendor_ruby/sass/stack.rb:88:in `with_import'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:323:in `visit_import'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/base.rb:36:in `visit'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:158:in `block in visit'
+/usr/lib/ruby/vendor_ruby/sass/stack.rb:79:in `block in with_base'
+/usr/lib/ruby/vendor_ruby/sass/stack.rb:115:in `with_frame'
+/usr/lib/ruby/vendor_ruby/sass/stack.rb:79:in `with_base'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:158:in `visit'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/base.rb:52:in `block in visit_children'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/base.rb:52:in `map'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/base.rb:52:in `visit_children'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:167:in `block in visit_children'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:179:in `with_environment'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:166:in `visit_children'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/base.rb:36:in `block in visit'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:186:in `visit_root'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/base.rb:36:in `visit'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:157:in `visit'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:8:in `visit'
+/usr/lib/ruby/vendor_ruby/sass/tree/root_node.rb:36:in `css_tree'
+/usr/lib/ruby/vendor_ruby/sass/tree/root_node.rb:29:in `render_with_sourcemap'
+/usr/lib/ruby/vendor_ruby/sass/engine.rb:378:in `_render_with_sourcemap'
+/usr/lib/ruby/vendor_ruby/sass/engine.rb:295:in `render_with_sourcemap'
+/usr/lib/ruby/vendor_ruby/sass/plugin/compiler.rb:490:in `update_stylesheet'
+/usr/lib/ruby/vendor_ruby/sass/plugin/compiler.rb:215:in `block in update_stylesheets'
+/usr/lib/ruby/vendor_ruby/sass/plugin/compiler.rb:209:in `each'
+/usr/lib/ruby/vendor_ruby/sass/plugin/compiler.rb:209:in `update_stylesheets'
+/usr/lib/ruby/vendor_ruby/sass/plugin/compiler.rb:471:in `on_file_changed'
+/usr/lib/ruby/vendor_ruby/sass/plugin/compiler.rb:328:in `block in watch'
+/usr/lib/ruby/vendor_ruby/listen/event/config.rb:23:in `call'
+/usr/lib/ruby/vendor_ruby/listen/event/processor.rb:115:in `_process_changes'
+/usr/lib/ruby/vendor_ruby/listen/event/processor.rb:19:in `block in loop_for'
+/usr/lib/ruby/vendor_ruby/listen/event/processor.rb:15:in `loop'
+/usr/lib/ruby/vendor_ruby/listen/event/processor.rb:15:in `loop_for'
+/usr/lib/ruby/vendor_ruby/listen/event/loop.rb:84:in `_wait_for_changes'
+/usr/lib/ruby/vendor_ruby/listen/event/loop.rb:42:in `block in setup'
+/usr/lib/ruby/vendor_ruby/listen/internals/thread_pool.rb:6:in `block in add'
+*/
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: "Error: Invalid CSS after \"...lor}: #{$value}\": expected \"{\", was \";\"\A         on line 4 of mlm/static/scss/argon-dashboard/bootstrap/_root.scss\A         from line 29 of mlm/static/scss/argon-dashboard.scss\A \A 1: :root {\A 2:   // Custom variable values only support SassScript inside `#{}`.\A 3:   @each $color, $value in $colors {\A 4:     --#{$color}: #{$value};\A 5:   }\A 6: \A 7:   @each $color, $value in $theme-colors {\A 8:     --#{$color}: #{$value};\A 9:   }"; }
