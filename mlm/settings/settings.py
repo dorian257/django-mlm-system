@@ -15,6 +15,8 @@ import os
 from django.contrib.messages import constants as messages
 from django.utils.translation import ugettext_lazy as _
 
+import django_heroku
+
 
 # mimetypes.add_type("text/css", ".css", True)
 
@@ -166,3 +168,5 @@ try:
     from .local_settings import *
 except ImportError:
     pass
+# Activate Django-Heroku.
+django_heroku.settings(locals())
