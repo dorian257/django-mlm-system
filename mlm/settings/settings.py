@@ -39,7 +39,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = "66d!6*via%m8pj!f7zk+z4=-*-b%^79rmod(x8@t!g$w)z$phn"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["django-mlm.herokuapp.com"]
 
