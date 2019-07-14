@@ -19,6 +19,19 @@
               <form role="form" method="post" action="" enctype="mulipart/form-data">
                 {% csrf_token %}
                 {% include "libs/bs4_form_head.html" with form=form %}
+                {% if not user.mlmclient %}
+                  <h6 class="heading-small text-muted mb-4">Section MLM</h6>
+                  <div class="pl-lg-4">
+                    <div class="row">
+                      <div class="col-lg-4">
+                        <div class="form-group">
+                          <label class="form-control-label" for="input-first-name">Parrain</label>
+                          <input type="text" name="mlmparent" placeholder="ID du parrain" class="form-control">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
                 <h6 class="heading-small text-muted mb-4">Informations personnelles</h6>
                 <div class="pl-lg-4">
                   <div class="row">

@@ -109,7 +109,7 @@ package-lock.json
 
 
 # Uglified JavaScript
-dist/
+# dist/
 
 # Staticfiles
 sitestatic/

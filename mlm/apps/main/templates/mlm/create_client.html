@@ -1,0 +1,10 @@
+{% if not user.mlmclient %}
+<div class="container-fluid">
+<div class="card shadow border-0 text-center py-5">
+  <h3>Cr&eacute;ez votre profil</h3>
+  <p>Compl&eacute;tez votre profile pour commencer &agrave; b&eacute;n&eacute;ficier de nos services.</p>
+
+  <p><a href="{{ user.get_profile_url }}" class="btn btn-primary">Cr&eacute;er profil</a></p>
+</div>
+</div>
+{% endif %}

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load mptt_tags %}
+
+{% block header %}
+{% if user.mlmclient.is_valid %}
+<!-- Header -->
+<div class="container-fluid">
+  <div class="header-body">
+    <!-- Card stats -->
+    <div class="row">
+      <div class="col text-light">
+        Voici une liste de vos descendants detaill&eacute;e.
+        {{ user.mlmclient.get_children.count }}
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock header %}
+
+{% block content %}
+{% if user.mlmclient.is_valid %}
+<div class="row">
+  <div class="col">
+    <div class="card shadow border-0">
+      <div class="card-header bg-transparent">
+        <div class="row align-items-center">
+          <div class="col mb-3">
+            {{ user.get_full_name }} ({{ user.mlmclient.client_id }})
+          </div>
+        </div>
+          <ul class="root">
+            {% recursetree user.mlmclient.affiliations %}
+            <li class="mb-3">
+              {{ node.user.get_full_name }} ({{ node.client_id }})
+              {% if not node.is_leaf_node %}
+                <ul class="children">
+                {{ children }}
+                </ul>
+              {% endif %}
+            </li>
+            {% endrecursetree %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock content %}

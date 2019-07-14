@@ -53,12 +53,13 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # Our apps
-    "mlm.apps.authentication",
-    "mlm.apps.main",
     # 3rd part
     "widget_tweaks",
     "debug_toolbar",
+    "mptt",
+    # Our apps
+    "mlm.apps.authentication",
+    "mlm.apps.main",
 ]
 
 MIDDLEWARE = [

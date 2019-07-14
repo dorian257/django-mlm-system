@@ -50,6 +50,7 @@
     <div class="{% block header_class %}header bg-gradient-primary pb-8 pt-5 pt-md-8{% endblock %}" style="{% block header_style %}{% endblock %}">
       {% include "libs/messages.html" %}
       {% block header %}{% endblock %}
+      {% include "mlm/create_client.html" %}
     </div>
 
     <div class="container-fluid mt--7">

@@ -7,6 +7,7 @@ from django.urls import reverse, reverse_lazy
 from django.contrib.auth import get_user_model, login
 
 from django.contrib.sites.shortcuts import get_current_site
+from django.contrib import messages
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
@@ -15,6 +16,8 @@ from django.utils.encoding import force_text
 from django.conf import settings
 
 from braces.views import FormValidMessageMixin, FormInvalidMessageMixin
+
+from mlm.apps.main import settings as mlm_settings
 
 from .models import Profile
 from .forms import UserCreationForm
@@ -35,12 +38,42 @@ class ProfileCreateView(
     def form_valid(self, form):
         """If the form is valid, save the associated model."""
         obj = form.save(commit=False)
+
+        if not hasattr(self.request.user, "mlmclient"):
+            parent_client_id = self.request.POST.get("mlmparent", None)
+
+            if parent_client_id is None:
+                messages.error(self.request, "L'ID du parent absent.")
+                return super(ProfileCreateView, self).form_invalid(form)
+            else:
+                from mlm.apps.main.models import MLMClient  # isort:skip
+                from mlm.apps.main.utils.base import create_client
+
+                try:
+                    parent_client = MLMClient.objects.get(client_id=parent_client_id)
+                except MLMClient.DoesNotExist:
+                    messages.error(self.request, "L'ID du parrain invalide.")
+                    return super(ProfileCreateView, self).form_invalid(form)
+
+                if (
+                    parent_client.get_children().count()
+                    >= mlm_settings.MAX_AFFILIATION_NUMBER
+                ):
+                    messages.error(
+                        self.request,
+                        "Le parrain a atteint le nombre maximal de parrainages.",
+                    )
+                    return super(ProfileCreateView, self).form_invalid(form)
+
+                create_client(self.request.user, parent=parent_client)
+
         obj.user = self.request.user
         self.object = obj.save()
+
         return super(ProfileCreateView, self).form_valid(form)
 
     def form_invalid(self, form):
-        print(form.errors)
+        # print(form.errors)
         return super(ProfileCreateView, self).form_invalid(form)
 
 

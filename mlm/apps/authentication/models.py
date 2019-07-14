@@ -192,12 +192,9 @@ class Profile(TimestampedModel):
     def get_full_name(self):
         name = self.first_name
         if self.middle_name:
-            name = (
-                name + " " + self.middle_name
-                if self.first_name
-                else name + self.middle_name
-            )
-        name + self.last_name
+            name += " " + self.middle_name
+
+        name += " " + self.last_name
 
         return name
 
