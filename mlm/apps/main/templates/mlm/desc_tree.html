@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load mptt_tags %}
+{% load mptt_tags static %}
 
 {% block header %}
 {% if user.mlmclient.is_valid %}
@@ -10,8 +10,6 @@
     <div class="row">
       <div class="col text-light">
         Voici une liste de vos descendants detaill&eacute;e.
-        {{ user.mlmclient.get_children.count }}
-
       </div>
     </div>
   </div>
@@ -26,11 +24,14 @@
     <div class="card shadow border-0">
       <div class="card-header bg-transparent">
         <div class="row align-items-center">
-          <div class="col mb-3">
+          <!-- <div class="col mb-3">
             {{ user.get_full_name }} ({{ user.mlmclient.client_id }})
-          </div>
+          </div> -->
         </div>
-          <ul class="root">
+        <div>
+          <div style="width:100%; height:700px;" id="orgchart"/>
+        </div>
+          <!-- <ul class="root">
             {% recursetree user.mlmclient.affiliations %}
             <li class="mb-3">
               {{ node.user.get_full_name }} ({{ node.client_id }})
@@ -41,7 +42,7 @@
               {% endif %}
             </li>
             {% endrecursetree %}
-          </ul>
+          </ul> -->
         </div>
       </div>
     </div>
@@ -49,3 +50,31 @@
 </div>
 {% endif %}
 {% endblock content %}
+
+
+{% block extra_js %}
+<script type="text/javascript" src="{% static 'js/plugins/orgchart.js' %}"></script>
+<script>
+var chart = new OrgChart(document.getElementById("orgchart"), {
+  template: "olivia",
+  enableSearch: false,
+  nodeBinding: {
+    field_0: "name",
+    field_1: "title",
+    img_0: "img"
+  },
+  nodes: [
+      {% recursetree user.mlmclient.affiliations %}
+        { id: {{ node.id }}, pid: {{ node.parent.id }},
+          name: "{{ node.user.get_full_name }}",
+          title: "ID : {{ node.client_id }}",
+          img: "{% if node.user.profile.avatar %}{{ node.user.profile.avatar.url }}{% else%}{% static 'img/default-user.png' %}{% endif %}" },
+        {% if not node.is_leaf_node %}
+          {{ children }}
+        {% endif %}
+      {% endrecursetree %}
+      { id: {{ user.mlmclient.id }}, name: "{{ user.get_full_name }}", title: "ID : {{ user.mlmclient.client_id }}", img: "{% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else%}{% static 'img/default-user.png' %}{% endif %}" }
+  ]
+});
+</script>
+{% endblock extra_js %}
