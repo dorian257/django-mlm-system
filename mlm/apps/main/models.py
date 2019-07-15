@@ -38,7 +38,7 @@ class MLMClient(MPTTModel, TimestampedModel):
     @property
     def year_affiliations(self):
         try:
-            return self.affilations.filter(created_at__year=timezone.now().year)
+            return self.affiliations.filter(created_at__year=timezone.now().year)
         except:
             return self.__class__.objects.none()
 
