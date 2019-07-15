@@ -30,10 +30,10 @@ UserAdmin.add_fieldsets = (
             "fields": (("username", "email"), ("password1", "password2")),
         },
     ),
-    (
-        "User Information",
-        {"classes": ("wide",), "fields": (("first_name", "last_name"),)},
-    ),
+    # (
+    #     "User Information",
+    #     {"classes": ("wide",), "fields": (("first_name", "last_name"),)},
+    # ),
 )
 
 
@@ -53,7 +53,7 @@ class CustomUserAdmin(UserAdmin):
 
     fieldsets = (
         UserAdmin.fieldsets[0],
-        UserAdmin.fieldsets[1],
+        # UserAdmin.fieldsets[1],
         ("Address and Permissions", {"fields": ("groups",)}),
         ("Other Information", {"fields": ["is_active", "is_staff"]}),
     )
