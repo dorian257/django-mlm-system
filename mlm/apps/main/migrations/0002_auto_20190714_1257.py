@@ -6,31 +6,31 @@ import django.utils.timezone
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('main', '0001_initial'),
-    ]
+    dependencies = [("main", "0001_initial")]
 
     operations = [
         migrations.AddField(
-            model_name='mlmclient',
-            name='client_id',
-            field=models.CharField(default=django.utils.timezone.now, max_length=20, unique=True),
+            model_name="mlmclient",
+            name="client_id",
+            field=models.CharField(default="1", max_length=20, unique=True),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='mlmclient',
-            name='created_at',
-            field=models.DateTimeField(auto_now_add=True, default=django.utils.timezone.now),
+            model_name="mlmclient",
+            name="created_at",
+            field=models.DateTimeField(
+                auto_now_add=True, default=django.utils.timezone.now
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='mlmclient',
-            name='is_valid',
+            model_name="mlmclient",
+            name="is_valid",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='mlmclient',
-            name='updated_at',
+            model_name="mlmclient",
+            name="updated_at",
             field=models.DateTimeField(auto_now=True),
         ),
     ]
