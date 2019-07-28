@@ -1,7 +1,8 @@
 {% extends "base.html" %}
+{% load humanize %}
 
 {% block header %}
-{% if user.mlmclient.is_valid %}
+{% if user.mlm_clients %}
 <!-- Header -->
       <div class="container-fluid">
         <div class="header-body">
@@ -12,12 +13,62 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">Mes bonus</h5>
+                      <span class="h2 font-weight-bold mb-0">USD 2,356</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                        <i class="fas fa-dollar-sign"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="mt-3 mb-0 text-muted text-sm">
+                    <span class="text-success mr-2">USD 0</span>
+                    <span class="text-nowrap">Semaine pas&eacute;e</span>
+                  </p>
+                  <p class="mt-3 mb-0 text-muted text-sm">
+                    <span class="text-success mr-2">USD 0</span>
+                    <span class="text-nowrap">Cette semaine</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-lg-6">
+              <div class="card card-stats mb-4 mb-xl-0">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">Bonus</h5>
+                      <span class="h2 font-weight-bold mb-0">USD 924</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
+                        <i class="fas fa-pencil-alt"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="mt-3 mb-0 text-muted text-sm">
+                    <span class="text-warning mr-2">USD 0</span>
+                    <span class="text-nowrap">Bonus total d'affiliations</span>
+                  </p>
+                  <p class="mt-3 mb-0 text-muted text-sm">
+                    <span class="text-warning mr-2">USD 0</span>
+                    <span class="text-nowrap">Bonus total des produits</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-lg-6">
+              <div class="card card-stats mb-4 mb-xl-0">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
                       <h5 class="card-title text-uppercase text-muted mb-0">Affiliations</h5>
                       <span class="h2 font-weight-bold mb-0">{{ user.mlmclient.get_descendant_count|default:"0" }}</span>
                     </div>
                     <div class="col-auto">
                       <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
-                        <i class="fas fa-chart-bar"></i>
+                        <i class="fas fa-users"></i>
                       </div>
                     </div>
                   </div>
@@ -25,31 +76,14 @@
                     <span class="text-success mr-2"><!-- <i class="fa fa-arrow-up"></i> 3.48% -->{{ user.mlmclient.year_affiliations.count|default:"0" }} nouvelle(s)</span>
                     <span class="text-nowrap">cette ann&eacute;e</span>
                   </p>
-                </div>
-              </div>
-            </div>
-            {% comment %}
-            <div class="col-xl-3 col-lg-6">
-              <div class="card card-stats mb-4 mb-xl-0">
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col">
-                      <h5 class="card-title text-uppercase text-muted mb-0">New users</h5>
-                      <span class="h2 font-weight-bold mb-0">2,356</span>
-                    </div>
-                    <div class="col-auto">
-                      <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
-                        <i class="fas fa-chart-pie"></i>
-                      </div>
-                    </div>
-                  </div>
                   <p class="mt-3 mb-0 text-muted text-sm">
-                    <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> 3.48%</span>
-                    <span class="text-nowrap">Since last week</span>
+                    <span class="text-success mr-2"><!-- <i class="fa fa-arrow-up"></i> 3.48% -->{{ user.mlmclient.year_affiliations.count|default:"0" }} nouvelle(s)</span>
+                    <span class="text-nowrap">ann&eacute;e pass&eacute;e</span>
                   </p>
                 </div>
               </div>
             </div>
+            {% comment %}
             <div class="col-xl-3 col-lg-6">
               <div class="card card-stats mb-4 mb-xl-0">
                 <div class="card-body">

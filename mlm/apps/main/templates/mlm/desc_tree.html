@@ -18,7 +18,7 @@
 {% endblock header %}
 
 {% block content %}
-{% if user.mlmclient.is_valid %}
+{% if user.mlm_clients %}
 <div class="row">
   <div class="col">
     <div class="card shadow border-0">
@@ -64,7 +64,7 @@ var chart = new OrgChart(document.getElementById("orgchart"), {
     img_0: "img"
   },
   nodes: [
-      {% recursetree user.mlmclient.affiliations %}
+      {% recursetree user.mlm_clients.first.affiliations %}
         { id: {{ node.id }}, pid: {{ node.parent.id }},
           name: "{{ node.user.get_full_name }}",
           title: "ID : {{ node.client_id }}",

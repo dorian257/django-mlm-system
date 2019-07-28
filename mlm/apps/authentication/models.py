@@ -120,6 +120,10 @@ class User(AbstractBaseUser, PermissionsMixin, TimestampedModel):
     def full_name(self):
         return self.get_full_name()
 
+    @property
+    def mlmclient(self):
+        return self.mlm_clients.first()
+
     def get_full_name(self):
         """
         This method is required by Django for things like handling emails.

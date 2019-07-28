@@ -53,10 +53,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.humanize",
     # 3rd part
     "widget_tweaks",
     "debug_toolbar",
     "mptt",
+    "django_extensions",
     # Our apps
     "mlm.apps.authentication",
     "mlm.apps.main",

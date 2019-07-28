@@ -39,7 +39,7 @@ class ProfileCreateView(
         """If the form is valid, save the associated model."""
         obj = form.save(commit=False)
 
-        if not hasattr(self.request.user, "mlmclient"):
+        if not self.request.user.mlm_clients.exists():
             parent_client_id = self.request.POST.get("mlmparent", None)
 
             if parent_client_id is None:
@@ -61,7 +61,7 @@ class ProfileCreateView(
                 ):
                     messages.error(
                         self.request,
-                        "Le parrain a atteint le nombre maximal de parrainages.",
+                        "L'upline a atteint le nombre maximal de parrainages.",
                     )
                     return super(ProfileCreateView, self).form_invalid(form)
 
