@@ -8,7 +8,7 @@ from mlm.apps.main.exceptions import InvalidClientParentError, InvalidAffiliatio
 User = get_user_model()
 
 
-def create_client(user, parent=None):
+def create_client(user, created_by, parent=None):
     """
     Function to create and validate a client
     """
@@ -17,7 +17,7 @@ def create_client(user, parent=None):
         raise RuntimeError("'user' must be instance of User.")
 
     # client, cr = MLMClient.objects.get_or_create(user=user)
-    client = MLMClient(user=user)
+    client = MLMClient(user=user, created_by=created_by)
     save_client = False
 
     if not client.is_active:
@@ -34,7 +34,12 @@ def create_client(user, parent=None):
             save_client = True
 
     elif parent is not None:
-        raise InvalidClientParentError("The 'Parent Object' given was invalid.")
+        try:
+            parent = MLMClient.objects.get(client_id=parent)
+            client.parent = parent
+            save_client = True
+        except MLMClient.DoesNotExist:
+            raise InvalidClientParentError("The 'Parent Object' given was invalid.")
 
     if parent.get_children().count() >= mlm_settings.MAX_AFFILIATION_NUMBER:
         raise InvalidAffiliationError(
@@ -49,15 +54,18 @@ def create_client(user, parent=None):
 
 
 def deactivate_client(user):
+    """
+    Change
+    """
+
     def _execute_deactivate(client):
         if client.is_active:
             client.is_active = False
-            client.is_admin = False
             client.save()
         return client
 
     if isinstance(user, User):
-        client = MLMClient.objects.filter(user=user)
+        client = user.mlmclient
         for c in client:
             _execute_deactivate(c)
         return user
@@ -66,11 +74,25 @@ def deactivate_client(user):
         return c.user
 
 
-def create_adminclient(user):
+def create_adminclient(user, created_by):
     """
     Function to create and make admin client
     """
-    client = create_client(user)
+    client = create_client(user, created_by)
     client.is_admin = True
     client.save()
     return client
+
+
+def get_system_client():
+    system_username = "sys_user_super"
+    system_email = "sys@email.email"
+
+    try:
+        u = User.objects.get(username=system_username, email=system_email)
+        c = u.mlmclient
+    except User.DoesNotExist:
+        u = User.objects.create_user(username=system_username, email=system_email)
+        c = create_adminclient(u, u)
+
+    return c

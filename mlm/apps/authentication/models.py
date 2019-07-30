@@ -53,6 +53,7 @@ class UserManager(BaseUserManager):
         user = self.create_user(username, email, password)
         user.is_superuser = True
         user.is_staff = True
+        user.is_mlm_staff = True
         user.save()
 
         return user
@@ -82,6 +83,7 @@ class User(AbstractBaseUser, PermissionsMixin, TimestampedModel):
     # log into the Django admin site. For most users this flag will always be
     # false.
     is_staff = models.BooleanField(default=False)
+    is_mlm_staff = models.BooleanField(default=False)
 
     # Boolean True if Email has been confirmed
     email_confirmed = models.BooleanField(default=False)

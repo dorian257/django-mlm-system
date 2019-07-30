@@ -13,7 +13,7 @@ from django.utils.text import capfirst
 from django.utils.translation import gettext
 from django.utils.translation import gettext_lazy as _
 
-from .models import User
+from .models import User, Profile
 
 UserModel = get_user_model()
 
@@ -83,3 +83,13 @@ class UserCreationForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+
+
+class AdminProfileCreationForm(forms.ModelForm):
+    email = forms.EmailField()
+    username = forms.CharField(max_length=150)
+    parent = forms.CharField(max_length=20, label=_("Upline ID"))
+
+    class Meta:
+        model = Profile
+        exclude = ("user",)

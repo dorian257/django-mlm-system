@@ -9,12 +9,14 @@
           </div>
           <div class="col-xl-6">
             <ul class="nav nav-footer justify-content-center justify-content-xl-end">
+              {% if user.mlm_clients.all.exists %}
               <li class="nav-item">
                 <a href="{% url 'main:dashboard' %}" class="nav-link">Dashboard</a>
               </li>
               <li class="nav-item">
                 <a href="{{ user.get_profile_url }}" class="nav-link">Profile</a>
               </li>
+              {% endif %}
               <li class="nav-item">
                 <a href="{% url 'auth:logout' %}" class="nav-link">Logout</a>
               </li>

@@ -73,6 +73,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
+    "mlm.apps.main.middleware.CheckClientMiddleware",
 ]
 
 ROOT_URLCONF = "mlm.urls"
@@ -104,6 +105,7 @@ AUTH_USER_MODEL = "authentication.User"
 
 
 LOGIN_URL = "/"
+LOGOUT_URL = "/logout/"
 LOGIN_REDIRECT_URL = "/dashboard/"
 LOGOUT_REDIRECT_URL = "/"
 
@@ -177,5 +179,6 @@ try:
     from .local_settings import *
 except ImportError:
     pass
+
 # Activate Django-Heroku.
 django_heroku.settings(locals())

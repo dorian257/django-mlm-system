@@ -9,3 +9,11 @@ class InvalidClientParentError(Exception):
 
 class InvalidAffiliationError(Exception):
     pass
+
+
+class OperationAmountError(Exception):
+    pass
+
+
+class OperationClientError(Exception):
+    pass

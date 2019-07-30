@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% load i18n humanize static %}
+
+{% block header %}
+{% if user.mlmclient.is_valid %}
+<!-- Header -->
+<div class="container-fluid">
+  <div class="header-body">
+    <!-- Card stats -->
+    <div class="row">
+      <div class="col text-light">
+        Voici une liste des clients.
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock header %}
+
+{% block content %}
+<!-- Table -->
+<div class="row">
+  <div class="col">
+    <div class="card shadow">
+      <div class="card-header border-0 clearfix">
+        <h3 class="mb-0 float-left">{% trans 'Clients' %}</h3>
+        <a href="{% url 'main:admin-client-add' %}" class="btn btn-sm btn-primary float-right">
+          <i class="fas fa-plus"></i> {% trans 'Nouveau' %}
+        </a>
+      </div>
+      <div class="table-responsive">
+        <table class="table align-items-center table-flush">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">{% trans 'Noms' %}</th>
+              <th scope="col">{% trans 'ID' %}</th>
+              <th scope="col">{% trans 'Upline' %}</th>
+              <th scope="col">{% trans 'Affiliations' %}</th>
+              <th scope="col">{% trans 'Admin' %}</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for client in object_list %}
+            <tr>
+              <td>
+                {% if client.is_active %}
+                <span class="badge badge-dot mr-4" title="{% trans 'Actif' %}">
+                  <i class="bg-success"></i>
+                </span>
+                {% else %}
+                <span class="badge badge-dot mr-4" title="{% trans 'Inactif' %}">
+                  <i class="bg-danger"></i>
+                </span>
+                {% endif %}
+                {{ client.user.get_full_name }}
+                {% if client.user.get_full_name != client.user.username %}<b>({{ client.user.username }})</b>{% endif %}
+              </td>
+              <td>
+                <span title="{{ client.client_id }}">{{ client.client_id }}</span>
+              </td>
+              <td>
+                <span title="{{ client.parent.user.get_full_name }} ({{ client.client_id }})">
+                  {{ client.parent.user.get_full_name }}
+                  <b>({{ client.parent.client_id }})</b>
+                </span>
+              </td>
+              <td>
+                {{ client.affiliations.count|intcomma }}
+              </td>
+              <td>
+                {% if client.user.is_mlm_staff %}
+                <span class="badge badge-dot mr-4" title="{% trans 'Admin' %}">
+                  <i class="bg-success"></i>
+                </span>
+                {% else %}
+                <span class="badge badge-dot mr-4" title="{% trans 'Normal' %}">
+                  <i class="bg-danger"></i>
+                </span>
+                {% endif %}
+              </td>
+              <td class="text-right">
+                <div class="dropdown">
+                  <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-ellipsis-v"></i>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                    <a class="dropdown-item" href="{{ client.get_absolute_url }}">Details</a>
+                    {% if client.is_active %}
+                    <a class="dropdown-item" href="{{ client.get_deactivation_url }}">Désactiver</a>
+                    {% else %}
+                    <a class="dropdown-item" href="{{ client.get_activation_url }}">Activer</a>
+                    {% endif %}
+                    {% if not client.user.is_mlm_staff %}
+                    <a class="dropdown-item" href="{{ client.get_set_admin_url }}">Nommer Admin</a>
+                    {% else %}
+                    <a class="dropdown-item" href="{{ client.get_delete_admin_url }}">Retirer Admin</a>
+                    {% endif %}
+                  </div>
+                </div>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="6">{% trans 'Pas de transaction ...' %}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer py-4">
+        <nav aria-label="...">
+          <ul class="pagination justify-content-end mb-0">
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1">
+                <i class="fas fa-angle-left"></i>
+                <span class="sr-only">Previous</span>
+              </a>
+            </li>
+            <li class="page-item active">
+              <a class="page-link" href="#">1 <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#">2</a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+              <a class="page-link" href="#">
+                <i class="fas fa-angle-right"></i>
+                <span class="sr-only">Next</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

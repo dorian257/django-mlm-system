@@ -3,7 +3,13 @@
 {% block content %}
 
 {% autoescape off %}
-<p>Hi {{ user.full_name }},<br>
+<p>
+Hi {{ user.full_name }},<br><br>
+
+Your account has been created at {{ domain }} with this credentials:<br>
+<b>Username </b>: {{ user.username }}<br>
+<b>Client ID </b>: {{ user_client.client_id }}<br>
+<b>Password </b>: {{ user_password }}<br><br>
 
 Please click on the link below to confirm your registration:<br>
 

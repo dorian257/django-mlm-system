@@ -80,6 +80,8 @@
             </div>
           </div>
         </div>
+
+        {% if user.mlm_clients.all.exists %}
         <!-- Form -->
         <form class="mt-4 mb-3 d-md-none">
           <div class="input-group input-group-rounded input-group-merge">
@@ -110,7 +112,7 @@
               <div class=" dropdown-header noti-title">
                 <h6 class="text-overflow m-0">Transactions!</h6>
               </div>
-              <a href="#" class="dropdown-item">
+              <a href="{% url 'main:statement' %}" class="dropdown-item">
                 <i class="ni ni-fat-delete"></i>
                 <span>{% trans 'Historique' %}</span>
               </a>
@@ -155,16 +157,31 @@
             </a>
           </li>-->
         </ul>
+        {% endif %}
+        {% if user.is_mlm_staff %}
+        <!-- Divider -->
+        <hr class="my-3">
+        <!-- Heading -->
+        <h6 class="navbar-heading text-muted">{% trans 'Gestion' %}</h6>
+        <!-- Navigation -->
+        <ul class="navbar-nav mb-md-3">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'main:admin-clients-list' %}">
+              <i class="ni ni-map-big"></i> {% trans 'Clients' %}
+            </a>
+          </li>
+        </ul>
+        {% endif %}
         {% if user.is_staff %}
         <!-- Divider -->
         <hr class="my-3">
         <!-- Heading -->
-        <h6 class="navbar-heading text-muted">Administration</h6>
+        <h6 class="navbar-heading text-muted">{% trans 'Administration' %}</h6>
         <!-- Navigation -->
         <ul class="navbar-nav mb-md-3">
           <li class="nav-item">
             <a class="nav-link" href="{% url 'admin:index' %}">
-              <i class="ni ni-spaceship"></i> Accueil
+              <i class="ni ni-spaceship"></i> {% trans 'Accueil' %}
             </a>
           </li>
           <!-- <li class="nav-item">

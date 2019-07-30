@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load i18n widget_tweaks %}
+
+{% block content %}
+<div class="row">
+        <div class="col-xl-12 mb-5 mb-xl-0">
+          <div class="card shadow">
+            <div class="card-header bg-transparent">
+              <div class="row align-items-center">
+                <div class="col-8">
+                  <h3 class="mb-0">{% trans 'Création Compte Client' %}</h3>
+                </div>
+                <div class="col-4 text-right">
+                  <a href="#!" class="btn btn-sm btn-primary">Param&egrave;tres</a>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <form role="form" method="post" action="" enctype="mulipart/form-data">
+                {% csrf_token %}
+                {% include "libs/bs4_form_head.html" with form=form %}
+                  <h6 class="heading-small text-muted mb-4">Utilisateur</h6>
+                  <div class="pl-lg-4">
+                    <div class="row">
+                      <div class="col-lg-4">
+                        <div class="form-group">
+                          <label class="form-control-label" for="">{{ form.username.label }}</label>
+                        <!-- {% render_field form.username placeholder=form.username.label class="form-control form-control-alternative" %} -->
+
+                        {% include "libs/bs4_field_essential.html" with field=form.username placeholder=form.username.label %}
+                        </div>
+                      </div>
+                      <div class="col-lg-4">
+                        <div class="form-group">
+                          <label class="form-control-label" for="">{{ form.email.label }}</label>
+                        <!-- {% render_field form.email placeholder=form.email.label class="form-control form-control-alternative" %} -->
+
+                        {% include "libs/bs4_field_essential.html" with field=form.email placeholder=form.email.label %}
+                        </div>
+                      </div>
+                      <div class="col-lg-4">
+                        <div class="form-group">
+                          <label class="form-control-label" for="">{{ form.parent.label }}</label>
+                        <!-- {% render_field form.parent placeholder=form.parent.label class="form-control form-control-alternative" %} -->
+
+                        {% include "libs/bs4_field_essential.html" with field=form.parent placeholder=form.parent.label %}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                <h6 class="heading-small text-muted mb-4">Informations personnelles</h6>
+                <div class="pl-lg-4">
+                  <div class="row">
+                    <div class="col-lg-4">
+                      <div class="form-group">
+                        <label class="form-control-label" for="">{{ form.first_name.label }}</label>
+                        <!-- {% render_field form.first_name placeholder=form.first_name.label class="form-control form-control-alternative" %} -->
+
+                        {% include "libs/bs4_field_essential.html" with field=form.first_name placeholder=form.first_name.label %}
+                      </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                      <div class="form-group">
+                        <label class="form-control-label" for="">{{ form.middle_name.label }}</label>
+                        <!-- {% render_field form.middle_name placeholder=form.middle_name.label class="form-control form-control-alternative" %} -->
+                        {% include "libs/bs4_field_essential.html" with field=form.middle_name placeholder=form.middle_name.label %}
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-last-name">{{ form.last_name.label }}</label>
+                        <!-- {% render_field form.last_name placeholder=form.last_name.label class="form-control form-control-alternative" %} -->
+                        {% include "libs/bs4_field_essential.html" with field=form.last_name placeholder=form.last_name.label %}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-4">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-last-name">{{ form.avatar.label }}</label>
+                        <!-- {% render_field form.avatar placeholder=form.avatar.label class="custom-file" %} -->
+                        {% include "libs/bs4_field_essential.html" with field=form.avatar placeholder=form.avatar.label %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <hr class="my-4" />
+                <!-- Address -->
+                <!-- <h6 class="heading-small text-muted mb-4">Contact information</h6>
+                <div class="pl-lg-4">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-address">Address</label>
+                        <input id="input-address" class="form-control form-control-alternative" placeholder="Home Address" value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09" type="text">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-4">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-city">City</label>
+                        <input type="text" id="input-city" class="form-control form-control-alternative" placeholder="City" value="New York">
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-country">Country</label>
+                        <input type="text" id="input-country" class="form-control form-control-alternative" placeholder="Country" value="United States">
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-country">Postal code</label>
+                        <input type="number" id="input-postal-code" class="form-control form-control-alternative" placeholder="Postal code">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <hr class="my-4" /> -->
+                <!-- Description -->
+                <h6 class="heading-small text-muted mb-4">Bio</h6>
+                <div class="pl-lg-4">
+                  <div class="form-group">
+                    <label>A propos de moi</label>
+                    <!-- <textarea rows="4" class="form-control form-control-alternative" placeholder="A few words about you ...">A beautiful Dashboard for Bootstrap 4. It is Free and Open Source.</textarea> -->
+                    <!-- {% render_field form.about_me rows="4" class="form-control form-control-alternative" placeholder="Quelques mots parlant de toi ..." %} -->
+                    {% include "libs/bs4_field_essential.html" with field=form.about_me placeholder=form.about_me.label %}
+                  </div>
+                </div>
+                <div class="text-right">
+                  <button class="btn btn-primary" type="submit">Enregistrer</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+{% endblock content %}
