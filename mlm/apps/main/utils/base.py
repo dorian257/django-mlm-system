@@ -81,8 +81,8 @@ def create_adminclient(user, created_by):
     Function to create and make admin client
     """
     client = create_client(user, created_by)
-    client.is_admin = True
-    client.save()
+    client.user.is_mlm_staff = True
+    client.user.save()
     return client
 
 
