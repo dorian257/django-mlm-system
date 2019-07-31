@@ -1,4 +1,4 @@
-{% load static %}
+{% load static i18n %}
 <!-- Navbar -->
 <nav class="navbar navbar-top navbar-expand-md navbar-dark" id="navbar-main">
   <div class="container-fluid">
@@ -36,6 +36,10 @@
           <a href="{{ user.get_profile_url }}" class="dropdown-item">
             <i class="ni ni-single-02"></i>
             <span>Profil</span>
+          </a>
+          <a href="{% url 'auth:password_change' %}" class="dropdown-item">
+            <i class="ni ni-key-25"></i>
+            <span>{% trans 'Changer Mot de Passe' %}</span>
           </a>
           <a href="{{ user.get_profile_url }}" class="dropdown-item">
             <i class="ni ni-settings-gear-65"></i>

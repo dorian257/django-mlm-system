@@ -1,7 +1,7 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from .models import MLMClient, MLMTransaction
+from .models import MLMClient, MLMTransaction, get_or_create_mlm_config
 from .utils.base import get_system_client
 
 
@@ -14,6 +14,8 @@ def execute_subscription_operation(sender, instance, created, *args, **kwargs):
     if instance and created:
         instance.is_active = True
         instance.save()
+
+        config = get_or_create_mlm_config()
         # We debit the Client from the subscription amount
         tr1 = MLMTransaction.objects.make_debit(
             instance, instance.subscription_amount, initiated_by=instance.created_by
@@ -22,6 +24,13 @@ def execute_subscription_operation(sender, instance, created, *args, **kwargs):
         system_client = get_system_client()
         tr2 = MLMTransaction.objects.make_credit(
             system_client,
-            instance.subscription_amount,
+            instance.subscription_amount - config.upline_commissions,
+            transaction_type=MLMTransaction.FOR_AFFILIATION,
+            initiated_by=instance.created_by,
+        )
+        tr3 = MLMTransaction.objects.make_credit(
+            instance.parent,
+            config.upline_commissions,
+            transaction_type=MLMTransaction.FOR_AFFILIATION,
             initiated_by=instance.created_by,
         )

@@ -19,8 +19,20 @@ class TransactionsStatementListView(LoginRequiredMixin, ListView):
     template_name = "mlm/statement.html"
     model = MLMTransaction
 
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(client__user__pk=self.request.user.pk)
+
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context["page_title"] = _("Historique des Transactions")
 
         return context
+
+
+class ClientBalanceView(LoginRequiredMixin, View):
+    template_name = "mlm/balance.html"
+
+    def get(self, request):
+        page_title = _("Solde")
+        return render(self.request, self.template_name, locals())

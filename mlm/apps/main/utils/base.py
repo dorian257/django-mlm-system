@@ -87,8 +87,8 @@ def create_adminclient(user, created_by):
 
 
 def get_system_client():
-    system_username = "sys_user_super"
-    system_email = "sys@email.email"
+    system_username = mlm_settings.SYSTEM_USERNAME
+    system_email = mlm_settings.SYSTEM_EMAIL
 
     try:
         u = User.objects.get(username=system_username, email=system_email)

@@ -10,7 +10,15 @@ class MLMTransactionManager(models.Manager):
 
     """
 
-    def make_operation(self, client, amount, debit_credit, initiated_by=None):
+    def make_operation(
+        self,
+        client,
+        amount,
+        debit_credit,
+        transaction_type=None,
+        description=None,
+        initiated_by=None,
+    ):
         if client is None:
             raise OperationClientError(_("Client must be given."))
 
@@ -46,6 +54,8 @@ class MLMTransactionManager(models.Manager):
             debit_credit=debit_credit,
             balance_after=balance_after,
             reference_number=reference,
+            transaction_type=transaction_type,
+            description=description,
         )
 
         tr.reference_line = (
@@ -65,16 +75,30 @@ class MLMTransactionManager(models.Manager):
 
         return tr
 
-    def make_credit(self, client, amount, initiated_by=None):
+    def make_credit(
+        self, client, amount, transaction_type=None, description=None, initiated_by=None
+    ):
         """ """
         return self.make_operation(
-            client, amount, debit_credit=self.model.CREDIT, initiated_by=initiated_by
+            client,
+            amount,
+            debit_credit=self.model.CREDIT,
+            transaction_type=transaction_type,
+            description=description,
+            initiated_by=initiated_by,
         )
 
-    def make_debit(self, client, amount, initiated_by=None):
+    def make_debit(
+        self, client, amount, transaction_type=None, description=None, initiated_by=None
+    ):
         """ """
         return self.make_operation(
-            client, amount, debit_credit=self.model.DEBIT, initiated_by=initiated_by
+            client,
+            amount,
+            debit_credit=self.model.DEBIT,
+            transaction_type=transaction_type,
+            description=description,
+            initiated_by=initiated_by,
         )
 
 

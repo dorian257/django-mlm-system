@@ -116,7 +116,7 @@
                 <i class="ni ni-fat-delete"></i>
                 <span>{% trans 'Historique' %}</span>
               </a>
-              <a href="#" class="dropdown-item">
+              <a href="{% url 'main:balance' %}" class="dropdown-item">
                 <i class="ni ni-fat-delete"></i>
                 <span>{% trans 'Solde' %}</span>
               </a>
@@ -168,6 +168,11 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'main:admin-clients-list' %}">
               <i class="ni ni-map-big"></i> {% trans 'Clients' %}
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'main:admin-config' %}">
+              <i class="ni ni-map-big"></i> {% trans 'Configurations' %}
             </a>
           </li>
         </ul>

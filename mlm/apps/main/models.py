@@ -18,9 +18,25 @@ from .managers import MLMClientManager, MLMTransactionManager
 User = get_user_model()
 
 
+def get_or_create_mlm_config():
+    try:
+        if MLMConfig.objects.filter().exists():
+            c = MLMConfig.objects.filter().first()
+            return c
+        else:
+            raise MLMConfig.DoesNotExist()
+    except MLMConfig.DoesNotExist:
+        return MLMConfig.objects.create(
+            mlm_name=mlm_settings.MLM_GROUP_NAME,
+            mlm_url=mlm_settings.MLM_GROUP_URL,
+            subscription_amount=mlm_settings.DEFAULT_SUBSCRIPTION_AMOUNT,
+            upline_commissions=mlm_settings.DEFAULT_UPLINE_CIOS_AMOUNT,
+        )
+
+
 def get_subscription_amount_default():
     try:
-        c = MLMConfig.objects.filter().first().get()
+        c = get_or_create_mlm_config()
         return c.subscription_amount
     except:
         return mlm_settings.DEFAULT_SUBSCRIPTION_AMOUNT
@@ -83,6 +99,50 @@ class MLMClient(MPTTModel, TimestampedModel):
         return "%s (%s)" % (self.user.get_full_name(), self.client_id)
 
     @property
+    def balance(self):
+        return self.available_amount
+
+    def get_bonus(self, **kwargs):
+        debits = (
+            self.mlm_transactions.filter(
+                debit_credit=MLMTransaction.DEBIT, **kwargs
+            ).aggregate(models.Max("amount"))["amount__max"]
+            or 0
+        )
+        credits = (
+            self.mlm_transactions.filter(
+                debit_credit=MLMTransaction.CREDIT, **kwargs
+            ).aggregate(models.Max("amount"))["amount__max"]
+            or 0
+        )
+
+        diff = credits - debits
+        if diff > 0:
+            return diff
+        else:
+            return 0
+
+    @property
+    def bonus(self, **kwargs):
+        return self.get_bonus()
+
+    @property
+    def this_year_bonus(self, **kwargs):
+        return self.get_bonus(created_at__year=timezone.now().year)
+
+    @property
+    def last_year_bonus(self, **kwargs):
+        return self.get_bonus(created_at__year=timezone.now().year - 1)
+
+    @property
+    def affiliation_bonus(self, **kwargs):
+        return self.get_bonus(transaction_type=MLMTransaction.FOR_AFFILIATION)
+
+    @property
+    def product_bonus(self, **kwargs):
+        return self.get_bonus(transaction_type=MLMTransaction.FOR_PRODUCT)
+
+    @property
     def affiliations(self):
         return self.get_descendants(include_self=False)
 
@@ -132,6 +192,16 @@ class MLMTransaction(TimestampedModel):
     CREDIT = "C"
 
     DC_CHOICES = ((DEBIT, "Debit"), (CREDIT, "Credit"))
+
+    SIMPLE = "S"
+    FOR_AFFILIATION = "A"
+    FOR_PRODUCT = "P"
+
+    TR_TYPE_CHOICES = (
+        (SIMPLE, "Simple"),
+        (FOR_AFFILIATION, "Affiliation"),
+        (FOR_PRODUCT, "Produits"),
+    )
     client = models.ForeignKey(
         "MLMClient",
         on_delete=models.PROTECT,
@@ -150,6 +220,10 @@ class MLMTransaction(TimestampedModel):
     reference_number = models.PositiveIntegerField()
     reference_line = models.PositiveIntegerField()
     balance_after = models.DecimalField(max_digits=16, decimal_places=2)
+    transaction_type = models.CharField(
+        max_length=1, choices=TR_TYPE_CHOICES, default=SIMPLE
+    )
+    description = models.TextField(null=True)
 
     # Managers
     objects = MLMTransactionManager()

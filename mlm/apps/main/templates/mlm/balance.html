@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load i18n humanize static %}
+
+{% block content %}
+<div class="row">
+  <div class="col">
+    <div class="card shadow border-0">
+        <div class="card-header bg-white border-0">
+        <div class="row align-items-center">
+          <div class="col-8">
+            <h3 class="mb-0">{{ user.get_full_name }}</h3>
+          </div>
+          <div class="col-4 text-right">
+            <a href="{% url 'main:statement' %}" class="btn btn-sm btn-primary">{% trans 'Transactions' %}</a>
+          </div>
+        </div>
+      </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-xl-3 col-lg-6">
+              <div class="card card-stats mb-4 mb-xl-0">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0" title="{{ user.mlmclient.client_id }} : USD {{ user.mlmclient.balance|intcomma }}">{{ user.mlmclient.client_id }}</h5>
+                      <span class="h2 font-weight-bold mb-0">USD {{ user.mlmclient.balance|intcomma }}</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                        <i class="fas fa-dollar-sign"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="mt-3 mb-0 text-muted text-sm">
+                    <span class="text-success mr-2">{{ user.mlmclient.mlm_transactions.all.count|intcomma }}</span>
+                    <span class="text-nowrap">transactions</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
