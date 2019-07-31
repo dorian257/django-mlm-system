@@ -18,6 +18,7 @@ def create_client(user, created_by, parent=None):
 
     # client, cr = MLMClient.objects.get_or_create(user=user)
     client = MLMClient(user=user, created_by=created_by)
+    client.save()
     save_client = False
 
     if not client.is_active:
@@ -33,7 +34,7 @@ def create_client(user, created_by, parent=None):
             client.parent = parent.mlmclient
             save_client = True
 
-    elif parent is not None:
+    elif parent:
         try:
             parent = MLMClient.objects.get(client_id=parent)
             client.parent = parent
@@ -41,10 +42,11 @@ def create_client(user, created_by, parent=None):
         except MLMClient.DoesNotExist:
             raise InvalidClientParentError("The 'Parent Object' given was invalid.")
 
-    if parent.get_children().count() >= mlm_settings.MAX_AFFILIATION_NUMBER:
-        raise InvalidAffiliationError(
-            "L'upline a atteint le nombre maximal de parrainages."
-        )
+    if parent is not None:
+        if parent.get_children().count() >= mlm_settings.MAX_AFFILIATION_NUMBER:
+            raise InvalidAffiliationError(
+                "L'upline a atteint le nombre maximal de parrainages."
+            )
 
     if save_client:
         client.save()

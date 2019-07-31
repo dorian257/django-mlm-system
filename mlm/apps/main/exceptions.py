@@ -3,17 +3,21 @@ MLM Client Related Exceptions
 """
 
 
-class InvalidClientParentError(Exception):
+class MLMException(Exception):
     pass
 
 
-class InvalidAffiliationError(Exception):
+class InvalidClientParentError(MLMException):
     pass
 
 
-class OperationAmountError(Exception):
+class InvalidAffiliationError(MLMException):
     pass
 
 
-class OperationClientError(Exception):
+class OperationAmountError(MLMException):
+    pass
+
+
+class OperationClientError(MLMException):
     pass

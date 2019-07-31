@@ -23,7 +23,7 @@ def get_subscription_amount_default():
         c = MLMConfig.objects.filter().first().get()
         return c.subscription_amount
     except:
-        return 0
+        return mlm_settings.DEFAULT_SUBSCRIPTION_AMOUNT
 
 
 class MLMConfig(TimestampedModel):
@@ -58,7 +58,9 @@ class MLMClient(MPTTModel, TimestampedModel):
         max_digits=16, decimal_places=2, default=get_subscription_amount_default
     )
 
-    available_amount = models.DecimalField(max_digits=16, decimal_places=2, default=0)
+    available_amount = models.DecimalField(
+        max_digits=16, decimal_places=2, default=get_subscription_amount_default
+    )
     created_by = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -168,7 +170,7 @@ class MLMTransaction(TimestampedModel):
         current_year = timezone.now().year
         current_reference = (
             cls.objects.filter(created_at__year=current_year).aggregate(
-                Max("reference_number")
+                models.Max("reference_number")
             )["reference_number__max"]
             or 0
         )

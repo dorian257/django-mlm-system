@@ -14,8 +14,13 @@ class MLMTransactionManager(models.Manager):
         if client is None:
             raise OperationClientError(_("Client must be given."))
 
-        if not client.is_active or not client.user.is_active:
-            raise OperationClientError(_("Client must be active."))
+        if not client.is_active:
+            if initiated_by.is_mlm_staff:
+                # The staff will do operations over inactive Users
+                pass
+            else:
+                if not client.user.is_active:
+                    raise OperationClientError(_("Client must be active."))
 
         if amount is None or amount <= 0:
             raise OperationAmountError(_("Amount must be given."))

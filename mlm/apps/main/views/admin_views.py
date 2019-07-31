@@ -4,8 +4,14 @@ from django.views.generic import ListView, FormView, DetailView
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
-from django.contrib import messages
 from django.conf import settings
+
+from django.contrib.sites.shortcuts import get_current_site
+from django.contrib import messages
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.template.loader import render_to_string
+from django.utils.encoding import force_text
 
 # from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext as _
@@ -13,7 +19,9 @@ from django.utils.translation import gettext as _
 from braces.views import FormValidMessageMixin, FormInvalidMessageMixin
 
 from mlm.apps.authentication.forms import AdminProfileCreationForm
+from mlm.apps.authentication.tokens import account_activation_token
 from mlm.apps.main.models import MLMClient, MLMTransaction
+from mlm.apps.main.exceptions import MLMException
 from mlm.apps.main.utils.base import deactivate_client, create_client
 
 from .mixins import MLMAdminRequiredMixin
@@ -47,12 +55,19 @@ class AdminRegistrationView(MLMAdminRequiredMixin, FormInvalidMessageMixin, Form
             user.is_active = False
         user.save()
 
+        messages.success(self.request, _("L'utilisateur a été créé avec succès."))
+
         # We save the profile
         profile.user = user
         profile.save()
 
-        client = create_client(user, created_by=self.request.user, parent=parent_client)
-
+        try:
+            client = create_client(
+                user, created_by=self.request.user, parent=parent_client
+            )
+        except MLMException as err:
+            messages.error(self.request, err)
+            return super().form_invalid(form)
         # We send the mail
         current_site = get_current_site(self.request)
         subject = "Validation de votre compte"
@@ -68,7 +83,7 @@ class AdminRegistrationView(MLMAdminRequiredMixin, FormInvalidMessageMixin, Form
             },
         )
         user.email_user(subject, message)
-        messages.success(_("Le Client a été créé avec succès."))
+        messages.success(self.request, _("Le Client a été créé avec succès."))
         return HttpResponseRedirect(self.success_url)
         # return super().form_valid(form)
 
@@ -89,6 +104,7 @@ class MLMClientDeactivateView(MLMAdminRequiredMixin, View):
         client = get_object_or_404(MLMClient, pk=pk)
         if type_ == 1:
             client.is_active = True
+            client.user.is_active = True
         elif type_ == 2:
             client.user.is_mlm_staff = True
         elif type_ == 3:
@@ -96,8 +112,9 @@ class MLMClientDeactivateView(MLMAdminRequiredMixin, View):
         else:
             client.is_active = False
             client.user.is_mlm_staff = False
-        client.save()
+            # client.user.is_active = True
         client.user.save()
+        client.save()
         messages.success(
             self.request, _("Le statut du client a été changé avec succès.")
         )
