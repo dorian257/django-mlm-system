@@ -44,11 +44,20 @@ class AdminRegistrationView(MLMAdminRequiredMixin, FormInvalidMessageMixin, Form
         password = User.objects.make_random_password()
         parent_client = form.cleaned_data["parent"]
 
-        print(form.cleaned_data)
+        # print(form.cleaned_data)
 
-        user = User.objects.create_user(
-            username=username, email=email, password=password
-        )
+        try:
+            user = User.objects.create_user(
+                username=username, email=email, password=password
+            )
+        except:  # TODO: Except specific exceptions
+            messages.error(
+                self.request,
+                _(
+                    "Nous ne pouvions pas créer un utilisateur avec les informations données. Vérifiez-les puis rééssayez."
+                ),
+            )
+            return super().form_invalid(form)
 
         profile = form.save(commit=False)
 
