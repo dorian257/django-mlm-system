@@ -63,6 +63,7 @@ def deactivate_client(user):
     def _execute_deactivate(client):
         if client.is_active:
             client.is_active = False
+            client.user.is_mlm_staff = False
             client.save()
         return client
 

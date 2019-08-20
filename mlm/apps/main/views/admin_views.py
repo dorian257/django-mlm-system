@@ -208,8 +208,7 @@ class MLMClientDeactivateView(MLMAdminRequiredMixin, View):
         elif type_ == 3:
             client.user.is_mlm_staff = False
         else:
-            client.is_active = False
-            client.user.is_mlm_staff = False
+            deactivate_client(client)
             # client.user.is_active = True
         client.user.save()
         client.save()

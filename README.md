@@ -13,7 +13,11 @@ Be sure that Python 3.5+ is installed globally or in a Python virtualenv.
     * `pip install -r requirements` to install dependencies
     * `python manage.py migrate` to sync with database
     * `python manage.py runserver` to run the development server.
-3. Follow instructions in **Contribute** section to contribute to the code
+
+3. Put initial data following these steps:
+    * run `python manage.py createsuperuser` for having a super user
+    * import and call function for creating a client in the shell `from mlm.apps.main.utils.base import create_adminclient`
+4. Follow instructions in **Contribute** section to contribute to the code
 
 ## Contribute
 

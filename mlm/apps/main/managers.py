@@ -15,8 +15,8 @@ class MLMTransactionManager(models.Manager):
         client,
         amount,
         debit_credit,
-        transaction_type=None,
-        description=None,
+        transaction_type,
+        description,
         initiated_by=None,
     ):
         if client is None:
@@ -76,7 +76,7 @@ class MLMTransactionManager(models.Manager):
         return tr
 
     def make_credit(
-        self, client, amount, transaction_type=None, description=None, initiated_by=None
+        self, client, amount, transaction_type, description, initiated_by=None
     ):
         """ """
         return self.make_operation(
@@ -89,7 +89,7 @@ class MLMTransactionManager(models.Manager):
         )
 
     def make_debit(
-        self, client, amount, transaction_type=None, description=None, initiated_by=None
+        self, client, amount, transaction_type, description, initiated_by=None
     ):
         """ """
         return self.make_operation(
